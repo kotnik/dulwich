@@ -547,6 +547,7 @@ class ProtocolGraphWalker(object):
         """
         o = self.store[want]
         pending = collections.deque([o])
+        known = set([want])
         while pending:
             commit = pending.popleft()
             if commit.id in haves:
@@ -555,6 +556,9 @@ class ProtocolGraphWalker(object):
                 # non-commit wants are assumed to be satisfied
                 continue
             for parent in commit.parents:
+                if parent in known:
+                    continue
+                known.add(parent)
                 parent_obj = self.store[parent]
                 # TODO: handle parents with later commit times than children
                 if parent_obj.commit_time >= earliest:
