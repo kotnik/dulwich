@@ -299,7 +299,7 @@ class GitClient(object):
         have = [x for x in old_refs.values() if not x == ZERO_SHA]
         sent_capabilities = False
 
-        for refname in set(new_refs.keys() + old_refs.keys()):
+        for refname in new_refs.keys():
             old_sha1 = old_refs.get(refname, ZERO_SHA)
             new_sha1 = new_refs.get(refname, ZERO_SHA)
 
