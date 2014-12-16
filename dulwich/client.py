@@ -600,7 +600,6 @@ class SubprocessWrapper(object):
     def __init__(self, proc):
         self.proc = proc
         self.read = proc.stdout.read
-        self.write = proc.stdin.write
 
     def can_read(self):
         if subprocess.mswindows:
@@ -610,6 +609,10 @@ class SubprocessWrapper(object):
             return PeekNamedPipe(handle, 0)[2] != 0
         else:
             return _fileno_can_read(self.proc.stdout.fileno())
+
+    def write(self, data):
+        self.proc.stdin.write(data)
+        self.proc.stdin.flush()
 
     def close(self):
         self.proc.stdin.close()
